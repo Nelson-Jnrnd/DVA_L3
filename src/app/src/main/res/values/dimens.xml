@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_row_width">43dp</dimen>
+    <dimen name="item_row_height">43dp</dimen>
+    <dimen name="item_row_note_title_text_size">16sp</dimen>
+    <dimen name="item_row_note_description_text_size">14sp</dimen>
+    <dimen name="item_row_margin">5dp</dimen>
+</resources>

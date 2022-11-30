@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">dva_l3</string>
     <string name="notes_title">My notes</string>
+    <string name="note_example">Note 132 sdojufh</string>
+    <string name="note_clock_example">1 month</string>
 </resources>
