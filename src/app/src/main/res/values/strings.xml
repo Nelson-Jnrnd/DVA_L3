@@ -3,4 +3,6 @@
     <string name="notes_title">My notes</string>
     <string name="note_example">Note 132 sdojufh</string>
     <string name="note_clock_example">1 month</string>
+    <string name="sort">tri des notes</string>
+    <string name="more">actions supplémentaires</string>
 </resources>
