@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notes_title" />
+        app:layout_constraintTop_toBottomOf="@id/notes_title"
+        tools:listitem="@layout/item_row"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

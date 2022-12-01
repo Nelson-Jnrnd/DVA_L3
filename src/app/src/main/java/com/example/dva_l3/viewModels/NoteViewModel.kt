@@ -10,7 +10,7 @@ import com.example.dva_l3.models.Note
 import com.example.dva_l3.database.NoteDatabase
 import com.example.dva_l3.database.NoteRepository
 
-class NoteViewModal (application: Application) :AndroidViewModel(application) {
+class NoteViewModel (application: Application) :AndroidViewModel(application) {
 
     // on below line we are creating a variable
     // for our all notes list and repository
