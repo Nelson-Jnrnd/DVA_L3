@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 
-@Entity
+@Entity(tableName = "notesTable")
 data class Note(
     @PrimaryKey(autoGenerate = true) var noteId : Long?,
     var state : State,
