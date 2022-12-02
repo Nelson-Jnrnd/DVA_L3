@@ -5,4 +5,8 @@
     <string name="note_clock_example">1 month</string>
     <string name="sort">tri des notes</string>
     <string name="more">actions supplémentaires</string>
+    <string name="sort_by_ETA">ETA</string>
+    <string name="sort_by_creation_date">Creation date</string>
+    <string name="generate">generate</string>
+    <string name="delete_all">Delete all</string>
 </resources>
