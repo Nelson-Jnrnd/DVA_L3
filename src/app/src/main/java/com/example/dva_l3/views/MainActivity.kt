@@ -5,14 +5,25 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.PopupMenu
+import androidx.fragment.app.FragmentContainerView
 import com.example.dva_l3.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         title = "Labo 3"
+
+        if (findViewById<FragmentContainerView>(R.id.fragment_container_notes) != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_notes, NotesFragment())
+                .commit()
+        }
+        if (findViewById<FragmentContainerView>(R.id.fragment_container_controls) != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_controls, ControlsFragment())
+                .commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -3,10 +3,13 @@
     <string name="notes_title">My notes</string>
     <string name="note_example">Note 132 sdojufh</string>
     <string name="note_clock_example">1 month</string>
-    <string name="sort">tri des notes</string>
+    <string name="sort">trier</string>
     <string name="more">actions supplémentaires</string>
     <string name="sort_by_ETA">ETA</string>
     <string name="sort_by_creation_date">Creation date</string>
     <string name="generate">generate</string>
     <string name="delete_all">Delete all</string>
+    <string name="nb_notes">0</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
