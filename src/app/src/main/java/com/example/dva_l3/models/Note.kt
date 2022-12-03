@@ -11,7 +11,7 @@ data class Note(
     var state : State,
     var title : String,
     var text : String,
-    //var creationDate : Calendar,
+    var creationDate : Calendar,
     var type : Type
 ) {
     companion object {
@@ -35,7 +35,7 @@ data class Note(
                 _state,
                 _title,
                 _text,
-                //Calendar.getInstance(),
+                Calendar.getInstance(),
                 _type
             )
         }
@@ -45,11 +45,11 @@ data class Note(
             val inThePast = rand.nextDouble() > 0.9
             val sign = if(inThePast) -1 else 1
             return Schedule(null,
-                    -1L, //tmp
-                    Calendar.getInstance().apply {
-                        add(Calendar.MONTH, sign * rand.nextInt(3))
-                        add(Calendar.DAY_OF_MONTH, sign * rand.nextInt(30))
-                    })
+                -1L, //tmp
+                Calendar.getInstance().apply {
+                    add(Calendar.MONTH, sign * rand.nextInt(3))
+                    add(Calendar.DAY_OF_MONTH, sign * rand.nextInt(30))
+                })
         }
     }
 }
