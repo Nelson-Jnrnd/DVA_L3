@@ -11,7 +11,7 @@ data class Note(
     var state : State,
     var title : String,
     var text : String,
-    var creationDate : Calendar,
+    //var creationDate : Calendar,
     var type : Type
 ) {
     companion object {
@@ -35,7 +35,7 @@ data class Note(
                 _state,
                 _title,
                 _text,
-                Calendar.getInstance(),
+                //Calendar.getInstance(),
                 _type
             )
         }

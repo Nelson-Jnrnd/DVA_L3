@@ -12,7 +12,6 @@ import com.example.dva_l3.models.Note
 
 class Adapter(
     val context: Context,
-    val noteClickDeleteInterface: NoteClickDeleteInterface,
     val noteClickInterface: NoteClickInterface
 ) :
     RecyclerView.Adapter<Adapter.ViewHolder>() {
@@ -43,7 +42,7 @@ class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // on below line we are setting data to item of recycler view.
         holder.noteTxtTitle.setText(allNotes.get(position).title)
-        holder.noteTxtClock.setText("Last Updated : " + allNotes.get(position).creationDate)
+        //holder.noteTxtClock.setText("Last Updated : " + allNotes.get(position).creationDate)
         // on below line we are adding click listener to our delete image view icon.
 
 
@@ -74,12 +73,6 @@ class Adapter(
         // change method to notify our adapter.
         notifyDataSetChanged()
     }
-}
-
-interface NoteClickDeleteInterface {
-    // creating a method for click
-    // action on delete image view.
-    fun onDeleteIconClick(note: Note)
 }
 
 interface NoteClickInterface {

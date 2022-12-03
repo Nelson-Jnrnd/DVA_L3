@@ -1,14 +1,30 @@
 package com.example.dva_l3.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.dva_l3.Adapter
+import com.example.dva_l3.NoteClickInterface
 import com.example.dva_l3.R
+import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.Note.Companion.generateRandomNote
+import com.example.dva_l3.viewModels.NoteViewModel
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), NoteClickInterface {
+
+    lateinit var viewModal: NoteViewModel
+    lateinit var notesRV: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,6 +40,24 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container_controls, ControlsFragment())
                 .commit()
         }
+
+        notesRV = findViewById(R.id.notes_RV)
+
+        notesRV.layoutManager = LinearLayoutManager(this)
+
+        val noteRVAdapter = Adapter(this, this)
+
+        notesRV.adapter = noteRVAdapter
+
+        viewModal = ViewModelProviders.of(this@MainActivity).get(NoteViewModel(application)::class.java)
+
+        viewModal.allNotes.observe(this, Observer { list ->
+            list?.let {
+                // on below line we are updating our list.
+                noteRVAdapter.updateList(it)
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -56,6 +90,8 @@ class MainActivity : AppCompatActivity() {
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.generate -> {
+                            onNoteClick(generateRandomNote())
+                            Toast.makeText(this, "Generated Note ", Toast.LENGTH_SHORT).show()
                             true
                         }
                         R.id.delete_all -> {
@@ -69,5 +105,9 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(menuItem)
         }
+    }
+
+    override fun onNoteClick(note: Note) {
+        viewModal.addNote(note)
     }
 }

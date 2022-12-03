@@ -4,13 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import com.example.dva_l3.models.Note
 import com.example.dva_l3.database.NoteDatabase
 import com.example.dva_l3.database.NoteRepository
+import com.example.dva_l3.models.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class NoteViewModel (application: Application) :AndroidViewModel(application) {
+class NoteViewModel (application: Application) : AndroidViewModel(application) {
 
     // on below line we are creating a variable
     // for our all notes list and repository
@@ -43,4 +43,5 @@ class NoteViewModel (application: Application) :AndroidViewModel(application) {
     fun addNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(note)
     }
+
 }
