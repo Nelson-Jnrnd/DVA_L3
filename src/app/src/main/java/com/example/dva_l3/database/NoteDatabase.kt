@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.dva_l3.models.Note
+import kotlin.concurrent.thread
 
 @Database(entities = arrayOf(Note::class), version = 1, exportSchema = false)
 abstract class NoteDatabase : RoomDatabase() {
@@ -25,12 +27,24 @@ abstract class NoteDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NoteDatabase::class.java,
-                    "note_database"
-                ).build()
+                    "note_database",
+                ).addCallback(DatabaseCallBack()).allowMainThreadQueries().build()
                 INSTANCE = instance
                 // return instance
                 instance
             }
         }
     }
+    private class DatabaseCallBack : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let {database ->
+                    thread {
+                        database.getNotesDao().deleteAll()
+                    }
+            }
+        }
+    }
 }
+
+

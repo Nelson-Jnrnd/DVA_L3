@@ -1,8 +1,6 @@
 package com.example.dva_l3.database
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import java.util.concurrent.Flow
 import com.example.dva_l3.models.Note
 
 class NoteRepository(private val notesDao: NoteDao) {
@@ -27,5 +25,9 @@ class NoteRepository(private val notesDao: NoteDao) {
     // updating our note from database.
     suspend fun update(note: Note){
         notesDao.update(note)
+    }
+
+    fun deleteAll() {
+        notesDao.deleteAll()
     }
 }

@@ -44,4 +44,8 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
         repository.insert(note)
     }
 
+    fun deleteNote() {
+        repository.deleteAll()
+    }
+
 }

@@ -8,19 +8,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.Adapter
 import com.example.dva_l3.NoteClickInterface
+import com.example.dva_l3.NoteDeleteInterface
 import com.example.dva_l3.R
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Note.Companion.generateRandomNote
 import com.example.dva_l3.viewModels.NoteViewModel
 
 
-class MainActivity : AppCompatActivity(), NoteClickInterface {
+class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface {
 
     lateinit var viewModal: NoteViewModel
     lateinit var notesRV: RecyclerView
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface {
 
         notesRV.layoutManager = LinearLayoutManager(this)
 
-        val noteRVAdapter = Adapter(this, this)
+        val noteRVAdapter = Adapter(this, this, this)
 
         notesRV.adapter = noteRVAdapter
 
@@ -95,6 +95,8 @@ class MainActivity : AppCompatActivity(), NoteClickInterface {
                             true
                         }
                         R.id.delete_all -> {
+                            onDeleteClick()
+                            Toast.makeText(this, "All notes deleted ", Toast.LENGTH_SHORT).show()
                             true
                         }
                         else -> false
@@ -109,5 +111,8 @@ class MainActivity : AppCompatActivity(), NoteClickInterface {
 
     override fun onNoteClick(note: Note) {
         viewModal.addNote(note)
+    }
+    override fun onDeleteClick() {
+        viewModal.deleteNote()
     }
 }
