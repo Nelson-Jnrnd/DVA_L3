@@ -34,5 +34,4 @@ interface NoteDao {
 
     @Query("DELETE FROM notesTable")
     fun deleteAll()
-
 }

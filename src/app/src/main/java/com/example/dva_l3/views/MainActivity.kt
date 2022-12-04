@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                             true
                         }
                         R.id.sort_by_creation_date -> {
+
                             true
                         }
                         else -> false

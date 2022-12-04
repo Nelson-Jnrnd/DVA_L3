@@ -11,11 +11,8 @@ import com.example.dva_l3.models.Note
 import kotlin.concurrent.thread
 
 
-@Database(entities = arrayOf(Note::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Note::class), version = 1, exportSchema = true)
 @TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun NoteDao(): NoteDao
-}
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract fun getNotesDao(): NoteDao
