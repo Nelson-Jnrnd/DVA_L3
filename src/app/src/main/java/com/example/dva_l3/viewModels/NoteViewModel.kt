@@ -33,8 +33,8 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
 
     // on below line we are creating a new method for updating a note. In this we are
     // calling a update method from our repository to update our note.
-    fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(note)
+    fun getAllNotesSorted() = viewModelScope.launch(Dispatchers.IO) {
+        repository.getAllNotesSorted()
     }
 
 

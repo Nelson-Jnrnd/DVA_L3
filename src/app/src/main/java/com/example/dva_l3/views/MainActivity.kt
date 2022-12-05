@@ -11,16 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dva_l3.Adapter
-import com.example.dva_l3.NoteClickInterface
-import com.example.dva_l3.NoteDeleteInterface
-import com.example.dva_l3.R
+import com.example.dva_l3.*
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Note.Companion.generateRandomNote
 import com.example.dva_l3.viewModels.NoteViewModel
 
 
-class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface {
+class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface,
+    getAllNotesSorted {
 
     lateinit var viewModal: NoteViewModel
     lateinit var notesRV: RecyclerView
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                             true
                         }
                         R.id.sort_by_creation_date -> {
-
+                            getAllNotesSorted()
                             true
                         }
                         else -> false
@@ -115,5 +113,8 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
     }
     override fun onDeleteClick() {
         viewModal.deleteNote()
+    }
+    override fun getAllNotesSorted() {
+        viewModal.getAllNotesSorted()
     }
 }

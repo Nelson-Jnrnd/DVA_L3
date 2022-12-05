@@ -29,8 +29,8 @@ interface NoteDao {
     fun getAllNotes(): LiveData<List<Note>>
 
     // below method is use to update the note.
-    @Update
-    suspend fun update(note: Note)
+    @Query("Select * from notesTable order by creationDate ASC")
+    fun getAllNotesSorted(): LiveData<List<Note>>
 
     @Query("DELETE FROM notesTable")
     fun deleteAll()

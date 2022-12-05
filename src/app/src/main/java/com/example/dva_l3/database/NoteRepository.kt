@@ -23,8 +23,8 @@ class NoteRepository(private val notesDao: NoteDao) {
 
     // on below line we are creating a update method for
     // updating our note from database.
-    suspend fun update(note: Note){
-        notesDao.update(note)
+    fun getAllNotesSorted(){
+        notesDao.getAllNotesSorted()
     }
 
     fun deleteAll() {

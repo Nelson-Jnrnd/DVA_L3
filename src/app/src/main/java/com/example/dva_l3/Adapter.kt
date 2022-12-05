@@ -85,11 +85,6 @@ class Adapter(
             noteClickInterface.onNoteClick(allNotes[position])
         }
 
-        holder.itemView.setOnClickListener {
-            // on below line we are calling a note click interface
-            // and we are passing a position to it.
-            noteDeleteInterface.onDeleteClick()
-        }
     }
 
     override fun getItemCount(): Int {
@@ -122,4 +117,9 @@ interface NoteDeleteInterface {
     // creating a method for click action
     // on recycler view item for updating it.
     fun onDeleteClick()
+}
+interface getAllNotesSorted {
+    // creating a method for click action
+    // on recycler view item for updating it.
+    fun getAllNotesSorted()
 }
