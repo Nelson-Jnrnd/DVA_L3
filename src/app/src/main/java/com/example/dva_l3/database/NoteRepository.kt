@@ -2,6 +2,8 @@ package com.example.dva_l3.database
 
 import androidx.lifecycle.LiveData
 import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.Schedule
+import com.example.dva_l3.viewModels.SortType
 
 class NoteRepository(private val notesDao: NoteDao) {
 
@@ -11,8 +13,14 @@ class NoteRepository(private val notesDao: NoteDao) {
 
     // on below line we are creating an insert method
     // for adding the note to our database.
-    suspend fun insert(note: Note) {
-        notesDao.insert(note)
+    fun insert(note: Note, schedule: Schedule?) {
+        val id = notesDao.insert(note)
+        print("ID: $id")
+        if (schedule != null) {
+            schedule.ownerId = id
+            notesDao.insert(schedule)
+        }
+
     }
 
     // on below line we are creating a delete method
@@ -23,8 +31,12 @@ class NoteRepository(private val notesDao: NoteDao) {
 
     // on below line we are creating a update method for
     // updating our note from database.
-    fun getAllNotesSorted(){
-        notesDao.getAllNotesSorted()
+    fun getAllNotesSorted(created: SortType) {
+        if (created == SortType.CREATED) {
+            notesDao.getAllNotesSortedByCreate()
+        } else {
+
+        }
     }
 
     fun deleteAll() {

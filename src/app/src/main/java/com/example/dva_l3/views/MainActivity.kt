@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.*
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Note.Companion.generateRandomNote
+import com.example.dva_l3.models.Note.Companion.generateRandomSchedule
+import com.example.dva_l3.models.Schedule
 import com.example.dva_l3.viewModels.NoteViewModel
+import com.example.dva_l3.viewModels.SortType
 
 
 class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface,
@@ -74,7 +77,8 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                             true
                         }
                         R.id.sort_by_creation_date -> {
-                            getAllNotesSorted()
+                            getAllNotesSorted(SortType.CREATED)
+                            Toast.makeText(this, "wesh... ", Toast.LENGTH_SHORT).show()
                             true
                         }
                         else -> false
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.generate -> {
-                            onNoteClick(generateRandomNote())
+                            onNoteClick(generateRandomNote(),generateRandomSchedule())
                             Toast.makeText(this, "Generated Note ", Toast.LENGTH_SHORT).show()
                             true
                         }
@@ -108,13 +112,14 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
         }
     }
 
-    override fun onNoteClick(note: Note) {
-        viewModal.addNote(note)
+    override fun onNoteClick(note: Note, generateRandomSchedule: Schedule?) {
+        viewModal.addNote(note, generateRandomSchedule)
     }
     override fun onDeleteClick() {
         viewModal.deleteNote()
     }
-    override fun getAllNotesSorted() {
-        viewModal.getAllNotesSorted()
+    override fun getAllNotesSorted(created: SortType) {
+        viewModal.getAllNotesSorted(created)
+
     }
 }

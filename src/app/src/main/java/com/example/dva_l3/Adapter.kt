@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dva_l3.models.Note
-import com.example.dva_l3.models.State
-import com.example.dva_l3.models.Type
+import com.example.dva_l3.models.*
+import com.example.dva_l3.viewModels.SortType
 import com.example.dva_l3.views.MainActivity
 
 
@@ -24,6 +23,8 @@ class Adapter(
     // on below line we are creating a
     // variable for our all notes list.
     private val allNotes = ArrayList<Note>()
+    private val allSchedules = ArrayList<Schedule>()
+
 
     // on below line we are creating a view holder class.
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -47,10 +48,15 @@ class Adapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // on below line we are setting data to item of recycler view.
-        holder.noteTxtTitle.text = allNotes[position].title
-        holder.noteTxtDescription.text = allNotes[position].text
+        val note = allNotes[position]
+        // find in NoteAndSchedule if the current note as a schedule
+        val schedule = allSchedules.find { it.ownerId == note.noteId }
 
-        when (allNotes[position].type) {
+
+        holder.noteTxtTitle.text = note.title
+        holder.noteTxtDescription.text = note.text
+
+        when (note.type) {
             Type.NONE -> {
                 holder.noteImgType.setImageResource(R.drawable.note)
             }
@@ -68,7 +74,7 @@ class Adapter(
             }
         }
 
-        when (allNotes[position].state) {
+        when (note.state) {
             State.IN_PROGRESS -> {
                 holder.noteImgType.setColorFilter(Color.BLACK)
             }
@@ -76,13 +82,22 @@ class Adapter(
                 holder.noteImgType.setColorFilter(Color.GREEN)
             }
         }
+        if (schedule != null) {
+            println("schedule found for note ${note.noteId}")
+            holder.noteTxtClock.text = schedule.date.toString()
+        } else {
+            // print to console
+            println("No schedule found for note ${note.noteId}")
+            holder.noteImgClock.visibility = View.GONE
+            holder.noteTxtClock.visibility = View.GONE
+        }
 
         // on below line we are adding click listener
         // to our recycler view item.
         holder.itemView.setOnClickListener {
             // on below line we are calling a note click interface
             // and we are passing a position to it.
-            noteClickInterface.onNoteClick(allNotes[position])
+            noteClickInterface.onNoteClick(note, Note.generateRandomSchedule())
         }
 
     }
@@ -110,7 +125,7 @@ class Adapter(
 interface NoteClickInterface {
     // creating a method for click action
     // on recycler view item for updating it.
-    fun onNoteClick(note: Note)
+    fun onNoteClick(note: Note, generateRandomSchedule: Schedule?)
 }
 
 interface NoteDeleteInterface {
@@ -121,5 +136,5 @@ interface NoteDeleteInterface {
 interface getAllNotesSorted {
     // creating a method for click action
     // on recycler view item for updating it.
-    fun getAllNotesSorted()
+    fun getAllNotesSorted(created: SortType)
 }

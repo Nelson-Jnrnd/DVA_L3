@@ -7,8 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.dva_l3.database.NoteDatabase
 import com.example.dva_l3.database.NoteRepository
 import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+enum class SortType {
+    CREATED, ETA
+}
 
 class NoteViewModel (application: Application) : AndroidViewModel(application) {
 
@@ -33,15 +38,22 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
 
     // on below line we are creating a new method for updating a note. In this we are
     // calling a update method from our repository to update our note.
-    fun getAllNotesSorted() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getAllNotesSorted()
+    fun getAllNotesSorted(created: SortType) = viewModelScope.launch(Dispatchers.IO) {
+        repository.getAllNotesSorted(created)
     }
 
 
     // on below line we are creating a new method for adding a new note to our database
     // we are calling a method from our repository to add a new note.
-    fun addNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(note)
+    fun addNote(note: Note, generateRandomSchedule: Schedule?) = viewModelScope.launch(Dispatchers.IO) {
+        if (generateRandomSchedule == null) {
+            println("No schedule")
+        }
+        else {
+            println("Schedule: ${generateRandomSchedule}")
+        }
+        repository.insert(note, generateRandomSchedule)
+
     }
 
     fun deleteNote() {

@@ -4,6 +4,7 @@ package com.example.dva_l3.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.Schedule
 
 // annotation for dao class.
 @Dao
@@ -11,8 +12,11 @@ interface NoteDao {
 
     // below is the insert method for
     // adding a new entry to our database.
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(note : Note)
+    @Insert
+    fun insert(note : Note) : Long
+
+    @Insert
+    fun insert(schedule: Schedule) : Long
 
     // below is the delete method
     // for deleting our note.
@@ -28,9 +32,9 @@ interface NoteDao {
     @Query("Select * from notesTable order by noteId ASC")
     fun getAllNotes(): LiveData<List<Note>>
 
-    // below method is use to update the note.
-    @Query("Select * from notesTable order by creationDate ASC")
-    fun getAllNotesSorted(): LiveData<List<Note>>
+
+    @Query("Select * from notesTable order by creationDate DESC")
+    fun getAllNotesSortedByCreate(): LiveData<List<Note>>
 
     @Query("DELETE FROM notesTable")
     fun deleteAll()
