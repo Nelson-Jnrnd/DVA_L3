@@ -81,6 +81,8 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.sort_by_ETA -> {
+                            viewModal.getAllNotesSorted(SortType.ETA)
+                            Toast.makeText(this, "sort by ETA...", Toast.LENGTH_SHORT).show()
                             true
                         }
                         R.id.sort_by_creation_date -> {
