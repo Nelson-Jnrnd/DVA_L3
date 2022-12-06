@@ -92,6 +92,8 @@ class Adapter(
             // Get the date as a string and set it to the text view
             val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time) // TODO change to locale or something
             holder.noteTxtClock.text = date.toString()
+            holder.noteImgClock.visibility = View.VISIBLE
+            holder.noteTxtClock.visibility = View.VISIBLE
         } else {
             // print to console
             println("No schedule found for note ${note.noteId}")
