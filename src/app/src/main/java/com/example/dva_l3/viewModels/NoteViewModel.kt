@@ -20,6 +20,7 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
     // on below line we are creating a variable
     // for our all notes list and repository
     val allNotes : LiveData<List<Note>>
+    val allSchedules : LiveData<List<Schedule>>
     val repository : NoteRepository
 
     // on below line we are initializing
@@ -28,6 +29,7 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
         val dao = NoteDatabase.getDatabase(application).getNotesDao()
         repository = NoteRepository(dao)
         allNotes = repository.allNotes
+        allSchedules = repository.allSchedules
     }
 
     // on below line we are creating a new method for deleting a note. In this we are

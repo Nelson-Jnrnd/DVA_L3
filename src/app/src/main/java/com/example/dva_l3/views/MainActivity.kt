@@ -59,6 +59,13 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
             }
         })
 
+        viewModal.allSchedules.observe(this, Observer { list ->
+            list?.let {
+                // on below line we are updating our list.
+                noteRVAdapter.updateScheduleList(it)
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -32,6 +32,9 @@ interface NoteDao {
     @Query("Select * from notesTable order by noteId ASC")
     fun getAllNotes(): LiveData<List<Note>>
 
+    @Query("Select * from schedulesTable order by scheduleId ASC")
+    fun getAllSchedules(): LiveData<List<Schedule>>
+
 
     @Query("Select * from notesTable order by creationDate DESC")
     fun getAllNotesSortedByCreate(): LiveData<List<Note>>

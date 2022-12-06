@@ -2,11 +2,14 @@ package com.example.dva_l3
 
 import android.content.Context
 import android.graphics.Color
+import android.icu.text.SimpleDateFormat
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.models.*
 import com.example.dva_l3.viewModels.SortType
@@ -46,12 +49,14 @@ class Adapter(
         return ViewHolder(itemView)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // on below line we are setting data to item of recycler view.
         val note = allNotes[position]
         // find in NoteAndSchedule if the current note as a schedule
         val schedule = allSchedules.find { it.ownerId == note.noteId }
 
+        println(allSchedules)
 
         holder.noteTxtTitle.text = note.title
         holder.noteTxtDescription.text = note.text
@@ -84,7 +89,9 @@ class Adapter(
         }
         if (schedule != null) {
             println("schedule found for note ${note.noteId}")
-            holder.noteTxtClock.text = schedule.date.toString()
+            // Get the date as a string and set it to the text view
+            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time) // TODO change to locale or something
+            holder.noteTxtClock.text = date.toString()
         } else {
             // print to console
             println("No schedule found for note ${note.noteId}")
@@ -92,13 +99,14 @@ class Adapter(
             holder.noteTxtClock.visibility = View.GONE
         }
 
+        /* TODO pk on ajoute une note quand on clique
         // on below line we are adding click listener
         // to our recycler view item.
         holder.itemView.setOnClickListener {
             // on below line we are calling a note click interface
             // and we are passing a position to it.
             noteClickInterface.onNoteClick(note, Note.generateRandomSchedule())
-        }
+        } */
 
     }
 
@@ -116,6 +124,19 @@ class Adapter(
         // on below line we are adding a
         // new list to our all notes list.
         allNotes.addAll(newList)
+        // on below line we are calling notify data
+        // change method to notify our adapter.
+        notifyDataSetChanged()
+    }
+
+    fun updateScheduleList(newList: List<Schedule>) {
+        println("Updated schedule list with ${newList.size} items")
+        // on below line we are clearing
+        // our notes array list
+        allSchedules.clear()
+        // on below line we are adding a
+        // new list to our all notes list.
+        allSchedules.addAll(newList)
         // on below line we are calling notify data
         // change method to notify our adapter.
         notifyDataSetChanged()
