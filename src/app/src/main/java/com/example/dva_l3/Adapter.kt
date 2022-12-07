@@ -133,15 +133,18 @@ class Adapter(
     }
 
     fun getAllNotesSorted(created: SortType) {
-        if (created == SortType.CREATED) {
-            allNotes.sortByDescending { it.creationDate }
-        } else if (created == SortType.ETA) {
+        when (created) {
+            SortType.CREATED -> {
+                allNotes.sortByDescending { it.creationDate }
+            }
+            SortType.ETA -> {
 
-            allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
-            // put the ones without a schedule at the begining
-            allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
-            println(allSchedules)
+                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
+                // put the ones without a schedule at the begining
+                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
+            }
         }
+
         notifyDataSetChanged()
     }
 }
