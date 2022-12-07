@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 .replace(R.id.fragment_container_controls, ControlsFragment())
                 .commit()
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

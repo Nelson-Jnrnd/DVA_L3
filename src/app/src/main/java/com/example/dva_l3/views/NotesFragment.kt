@@ -38,6 +38,12 @@ class NotesFragment : Fragment() {
                 adapter.updateList(it)
             }
         }
+
+        viewModel.allSchedules.observe(viewLifecycleOwner) {
+                list -> list?.let {
+                adapter.updateScheduleList(it)
+            }
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
