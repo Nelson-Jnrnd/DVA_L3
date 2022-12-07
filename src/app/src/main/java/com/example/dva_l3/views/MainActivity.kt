@@ -20,11 +20,11 @@ import com.example.dva_l3.viewModels.NoteViewModel
 import com.example.dva_l3.viewModels.SortType
 
 
-class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface,
-    getAllNotesSorted {
+class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface{
 
     lateinit var viewModal: NoteViewModel
     lateinit var notesRV: RecyclerView
+    lateinit var noteRVAdapter: Adapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
 
         notesRV.layoutManager = LinearLayoutManager(this)
 
-        val noteRVAdapter = Adapter(this, this, this)
+        noteRVAdapter = Adapter(this, this, this)
 
         notesRV.adapter = noteRVAdapter
 
@@ -81,10 +81,11 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.sort_by_ETA -> {
+                            noteRVAdapter.getAllNotesSorted(SortType.ETA)
                             true
                         }
                         R.id.sort_by_creation_date -> {
-                            getAllNotesSorted(SortType.CREATED)
+                            noteRVAdapter.getAllNotesSorted(SortType.CREATED)
                             Toast.makeText(this, "wesh... ", Toast.LENGTH_SHORT).show()
                             true
                         }
@@ -124,9 +125,5 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
     }
     override fun onDeleteClick() {
         viewModal.deleteNote()
-    }
-    override fun getAllNotesSorted(created: SortType) {
-        viewModal.getAllNotesSorted(created)
-
     }
 }

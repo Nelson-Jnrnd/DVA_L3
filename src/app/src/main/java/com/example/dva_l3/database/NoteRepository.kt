@@ -32,15 +32,10 @@ class NoteRepository(private val notesDao: NoteDao) {
 
     // on below line we are creating a update method for
     // updating our note from database.
-    fun getAllNotesSorted(created: SortType) {
-        if (created == SortType.CREATED) {
-            notesDao.getAllNotesSortedByCreate()
-        } else {
 
-        }
-    }
 
     fun deleteAll() {
         notesDao.deleteAll()
+        notesDao.deleteAllSchedule()
     }
 }

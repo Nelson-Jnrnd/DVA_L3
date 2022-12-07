@@ -1,5 +1,6 @@
 package com.example.dva_l3
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
@@ -27,6 +28,7 @@ class Adapter(
     // variable for our all notes list.
     private val allNotes = ArrayList<Note>()
     private val allSchedules = ArrayList<Schedule>()
+    private val allNoteSchedules = ArrayList<NoteAndSchedule>()
 
 
     // on below line we are creating a view holder class.
@@ -55,8 +57,6 @@ class Adapter(
         val note = allNotes[position]
         // find in NoteAndSchedule if the current note as a schedule
         val schedule = allSchedules.find { it.ownerId == note.noteId }
-
-        println(allSchedules)
 
         holder.noteTxtTitle.text = note.title
         holder.noteTxtDescription.text = note.text
@@ -88,7 +88,6 @@ class Adapter(
             }
         }
         if (schedule != null) {
-            println("schedule found for note ${note.noteId}")
             // Get the date as a string and set it to the text view
             val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time) // TODO change to locale or something
             holder.noteTxtClock.text = date.toString()
@@ -96,19 +95,9 @@ class Adapter(
             holder.noteTxtClock.visibility = View.VISIBLE
         } else {
             // print to console
-            println("No schedule found for note ${note.noteId}")
             holder.noteImgClock.visibility = View.GONE
             holder.noteTxtClock.visibility = View.GONE
         }
-
-        /* TODO pk on ajoute une note quand on clique
-        // on below line we are adding click listener
-        // to our recycler view item.
-        holder.itemView.setOnClickListener {
-            // on below line we are calling a note click interface
-            // and we are passing a position to it.
-            noteClickInterface.onNoteClick(note, Note.generateRandomSchedule())
-        } */
 
     }
 
@@ -132,7 +121,6 @@ class Adapter(
     }
 
     fun updateScheduleList(newList: List<Schedule>) {
-        println("Updated schedule list with ${newList.size} items")
         // on below line we are clearing
         // our notes array list
         allSchedules.clear()
@@ -143,7 +131,21 @@ class Adapter(
         // change method to notify our adapter.
         notifyDataSetChanged()
     }
+
+    fun getAllNotesSorted(created: SortType) {
+        if (created == SortType.CREATED) {
+            allNotes.sortByDescending { it.creationDate }
+        } else if (created == SortType.ETA) {
+
+            allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
+            // put the ones without a schedule at the begining
+            allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
+            println(allSchedules)
+        }
+        notifyDataSetChanged()
+    }
 }
+
 
 interface NoteClickInterface {
     // creating a method for click action
@@ -155,9 +157,4 @@ interface NoteDeleteInterface {
     // creating a method for click action
     // on recycler view item for updating it.
     fun onDeleteClick()
-}
-interface getAllNotesSorted {
-    // creating a method for click action
-    // on recycler view item for updating it.
-    fun getAllNotesSorted(created: SortType)
 }
