@@ -1,6 +1,6 @@
 package com.example.dva_l3
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
@@ -13,20 +13,22 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.models.*
 import com.example.dva_l3.viewModels.SortType
-import com.example.dva_l3.views.MainActivity
+import com.example.dva_l3.views.NotesFragment
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class Adapter(
-    val context: Context,
-    val noteClickInterface: NoteClickInterface,
-    val noteDeleteInterface: MainActivity
+    val context: NotesFragment
 ) :
+
     RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     // on below line we are creating a
     // variable for our all notes list.
     private val allNotes = ArrayList<Note>()
     private val allSchedules = ArrayList<Schedule>()
+    private var currentSort: SortType? = null
 
 
     // on below line we are creating a view holder class.
@@ -49,14 +51,13 @@ class Adapter(
         return ViewHolder(itemView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // on below line we are setting data to item of recycler view.
         val note = allNotes[position]
         // find in NoteAndSchedule if the current note as a schedule
         val schedule = allSchedules.find { it.ownerId == note.noteId }
-
-        println(allSchedules)
 
         holder.noteTxtTitle.text = note.title
         holder.noteTxtDescription.text = note.text
@@ -88,27 +89,48 @@ class Adapter(
             }
         }
         if (schedule != null) {
-            println("schedule found for note ${note.noteId}")
             // Get the date as a string and set it to the text view
-            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time) // TODO change to locale or something
-            holder.noteTxtClock.text = date.toString()
+            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time)
+            val current = SimpleDateFormat("dd/MM/yyyy").format(Date())
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val firstDate: Date = sdf.parse(date)
+            val secondDate: Date = sdf.parse(current)
+
+
+            if (firstDate < secondDate) {
+                holder.noteTxtClock.setTextColor(Color.RED)
+                holder.noteTxtClock.text = "Late"
+                holder.noteImgClock.setColorFilter(Color.RED)
+            }
+            else if (firstDate == secondDate) {
+                holder.noteTxtClock.setTextColor(Color.YELLOW)
+                holder.noteTxtClock.text = "Today"
+                holder.noteImgClock.setColorFilter(Color.YELLOW)
+            }
+            else{
+                val diff: Long = firstDate.time - secondDate.time
+                val day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+                if (day >= 30){
+                    val month = Math.abs(day / 30)
+                    if (month >= 12){
+                        val year = Math.abs(month / 12)
+                        holder.noteTxtClock.text = "$year years"
+                    }
+                    else{
+                        holder.noteTxtClock.text = "$month months"
+                    }
+                }
+                else{
+                    holder.noteTxtClock.text = "$day days"
+                }
+            }
+
             holder.noteImgClock.visibility = View.VISIBLE
             holder.noteTxtClock.visibility = View.VISIBLE
         } else {
-            // print to console
-            println("No schedule found for note ${note.noteId}")
             holder.noteImgClock.visibility = View.GONE
             holder.noteTxtClock.visibility = View.GONE
         }
-
-        /* TODO pk on ajoute une note quand on clique
-        // on below line we are adding click listener
-        // to our recycler view item.
-        holder.itemView.setOnClickListener {
-            // on below line we are calling a note click interface
-            // and we are passing a position to it.
-            noteClickInterface.onNoteClick(note, Note.generateRandomSchedule())
-        } */
 
     }
 
@@ -126,13 +148,14 @@ class Adapter(
         // on below line we are adding a
         // new list to our all notes list.
         allNotes.addAll(newList)
+        currentSort?.let { getAllNotesSorted(it) }
+
         // on below line we are calling notify data
         // change method to notify our adapter.
         notifyDataSetChanged()
     }
 
     fun updateScheduleList(newList: List<Schedule>) {
-        println("Updated schedule list with ${newList.size} items")
         // on below line we are clearing
         // our notes array list
         allSchedules.clear()
@@ -141,6 +164,21 @@ class Adapter(
         allSchedules.addAll(newList)
         // on below line we are calling notify data
         // change method to notify our adapter.
+        notifyDataSetChanged()
+    }
+
+    fun getAllNotesSorted(created: SortType) {
+        currentSort = created
+        when (created) {
+            SortType.CREATED -> {
+                allNotes.sortByDescending { it.creationDate }
+            }
+            SortType.ETA -> {
+                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
+                // put the ones without a schedule at the begining
+                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
+            }
+        }
         notifyDataSetChanged()
     }
 }
@@ -155,9 +193,4 @@ interface NoteDeleteInterface {
     // creating a method for click action
     // on recycler view item for updating it.
     fun onDeleteClick()
-}
-interface getAllNotesSorted {
-    // creating a method for click action
-    // on recycler view item for updating it.
-    fun getAllNotesSorted(created: SortType)
 }

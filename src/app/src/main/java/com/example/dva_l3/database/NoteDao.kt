@@ -35,10 +35,12 @@ interface NoteDao {
     @Query("Select * from schedulesTable order by scheduleId ASC")
     fun getAllSchedules(): LiveData<List<Schedule>>
 
-
-    @Query("Select * from notesTable order by creationDate DESC")
-    fun getAllNotesSortedByCreate(): LiveData<List<Note>>
-
     @Query("DELETE FROM notesTable")
     fun deleteAll()
+
+    @Query("DELETE FROM SchedulesTable")
+    fun deleteAllSchedule()
+
+    @Query("SELECT COUNT(*) FROM notesTable")
+    fun getCount(): LiveData<Int>
 }

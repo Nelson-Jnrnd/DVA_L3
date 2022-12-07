@@ -12,19 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/notes_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/notes_title"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notes_RV"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/containerNormalNotes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/notes_title"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/item_row" />
+            android:name="com.example.dva_l3.views.ControlsFragment"
+            tools:layout="@layout/fragment_notes" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
