@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/containerNormalNotes"
+            android:id="@+id/fragment_container_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.example.dva_l3.views.ControlsFragment"
