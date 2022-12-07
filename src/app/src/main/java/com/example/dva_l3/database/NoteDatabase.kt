@@ -1,3 +1,14 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : NoteDatabase.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.database
 
 import android.content.Context
@@ -8,7 +19,6 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Schedule
-import com.example.dva_l3.views.MainActivity
 import kotlin.concurrent.thread
 
 
@@ -19,9 +29,6 @@ abstract class NoteDatabase : RoomDatabase() {
     abstract fun getNotesDao(): NoteDao
 
     companion object {
-        // Singleton prevents multiple
-        // instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: NoteDatabase? = null
 
@@ -35,7 +42,6 @@ abstract class NoteDatabase : RoomDatabase() {
                     "note_database",
                 ).addCallback(DatabaseCallBack()).allowMainThreadQueries().build()
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }
@@ -44,10 +50,9 @@ abstract class NoteDatabase : RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let {database ->
-                    thread {
-                        database.getNotesDao().deleteAll()
-                    }
-
+                thread {
+                    database.getNotesDao().deleteAll()
+                }
             }
         }
     }

@@ -1,17 +1,26 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : NoteRepository.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.database
 
 import androidx.lifecycle.LiveData
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.models.Schedule
-import com.example.dva_l3.viewModels.SortType
 
 class NoteRepository(private val notesDao: NoteDao) {
 
     // on below line we are creating a variable for our list
     // and we are getting all the notes from our DAO class.
     val allNotes: LiveData<List<NoteAndSchedule>> = notesDao.getAllNotes()
-    val allSchedules: LiveData<List<Schedule>> = notesDao.getAllSchedules()
     val nbNotes: LiveData<Int> = notesDao.getCount()
 
 
@@ -25,7 +34,6 @@ class NoteRepository(private val notesDao: NoteDao) {
             notesDao.insert(schedule)
         }
     }
-
 
     fun deleteAll() {
         notesDao.deleteAll()

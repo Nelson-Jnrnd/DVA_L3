@@ -1,3 +1,14 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : MainActivity.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.views
 
 import android.os.Bundle
@@ -58,14 +69,13 @@ class MainActivity : AppCompatActivity(){
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.sort_by_ETA -> {
-                            Toast.makeText(this, "sort by ETA...", Toast.LENGTH_SHORT).show()
                             viewModel.getAllNotesSorted(SortType.ETA)
-
+                            Toast.makeText(this, "sort by ETA", Toast.LENGTH_SHORT).show()
                             true
                         }
                         R.id.sort_by_creation_date -> {
                             viewModel.getAllNotesSorted(SortType.CREATED)
-                            Toast.makeText(this, "wesh... ", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "sort by Creation ", Toast.LENGTH_SHORT).show()
                             true
                         }
                         else -> false

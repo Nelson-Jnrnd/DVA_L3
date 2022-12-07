@@ -1,3 +1,14 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : NoteFragments.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.views
 
 import android.os.Bundle
@@ -11,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.Adapter
 import com.example.dva_l3.MyApp
 import com.example.dva_l3.R
-import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.viewModels.NoteViewModel
 import com.example.dva_l3.viewModels.SortType
@@ -35,20 +45,16 @@ class NotesFragment : Fragment() {
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(context)
 
-        viewModel.allNotes.observe(viewLifecycleOwner) {
-                list -> list?.let {
-                adapter.updateList(it)
-            }
-        }
         viewModel.types.observe(viewLifecycleOwner) {
             adapter.items = getAllSorted(adapter.items, it)
         }
 
-        viewModel.allSchedules.observe(viewLifecycleOwner) {
+        viewModel.allNotes.observe(viewLifecycleOwner) {
                 list -> list?.let {
-                adapter.updateScheduleList(it)
+            adapter.updateList(it)
             }
         }
+
     }
     private fun getAllSorted(items: List<NoteAndSchedule>, created: SortType): List<NoteAndSchedule> {
         currentSort = created

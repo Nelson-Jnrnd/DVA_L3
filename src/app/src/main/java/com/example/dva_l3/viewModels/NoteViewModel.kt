@@ -1,11 +1,21 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : NoteViewModel.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.viewModels
 
-import android.app.Application
+
 import androidx.lifecycle.*
-import com.example.dva_l3.database.NoteDatabase
+
 import com.example.dva_l3.database.NoteRepository
 import com.example.dva_l3.models.Note
-import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.models.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,8 +27,7 @@ enum class SortType {
 class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
     // on below line we are creating a variable
     // for our all notes list and repository
-    val allNotes : LiveData<List<NoteAndSchedule>> = repository.allNotes
-    val allSchedules : LiveData<List<Schedule>> = repository.allSchedules
+    val allNotes = repository.allNotes
     val nbNotes = repository.nbNotes
     val mutTypes = MutableLiveData(SortType.CREATED)
     var types : LiveData<SortType> = mutTypes
@@ -38,12 +47,13 @@ class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
        mutTypes.value = type
     }
 
-class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(NoteViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return NoteViewModel(repository) as T
+    class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if(modelClass.isAssignableFrom(NoteViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return NoteViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
-}}
+}

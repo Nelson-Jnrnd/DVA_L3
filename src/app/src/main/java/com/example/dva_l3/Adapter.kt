@@ -1,3 +1,14 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : Adapter.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3
 
 import android.annotation.SuppressLint
@@ -12,7 +23,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.models.*
-import com.example.dva_l3.viewModels.SortType
 import com.example.dva_l3.views.NotesFragment
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -24,11 +34,9 @@ class Adapter(
 
     RecyclerView.Adapter<Adapter.ViewHolder>() {
 
-
     // on below line we are creating a
     // variable for our all notes list.
     private val allNotes = ArrayList<NoteAndSchedule>()
-    private val allSchedules = ArrayList<Schedule>()
     var items = listOf<NoteAndSchedule>()
         set(value) {
             field = value
@@ -62,7 +70,7 @@ class Adapter(
         val notes = items[position]
         val note = notes.note
         // find in NoteAndSchedule if the current note as a schedule
-        val schedule = allSchedules.find { it.ownerId == note.noteId }
+        val schedule = items[position]
 
         holder.noteTxtTitle.text = note.title
         holder.noteTxtDescription.text = note.text
@@ -93,9 +101,9 @@ class Adapter(
                 holder.noteImgType.setColorFilter(Color.GREEN)
             }
         }
-        if (schedule != null) {
+        if (schedule.schedule != null) {
             // Get the date as a string and set it to the text view
-            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time)
+            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.schedule.date.time)
             val current = SimpleDateFormat("dd/MM/yyyy").format(Date())
             val sdf = SimpleDateFormat("dd/MM/yyyy")
             val firstDate: Date = sdf.parse(date)
@@ -156,20 +164,6 @@ class Adapter(
         allNotes.addAll(newList)
         items = allNotes
 
-        // on below line we are calling notify data
-        // change method to notify our adapter.
-        notifyDataSetChanged()
-    }
-
-    fun updateScheduleList(newList: List<Schedule>) {
-        // on below line we are clearing
-        // our notes array list
-        allSchedules.clear()
-        items = allNotes
-        // on below line we are adding a
-        // new list to our all notes list.
-        allSchedules.addAll(newList)
-        items = allNotes
         // on below line we are calling notify data
         // change method to notify our adapter.
         notifyDataSetChanged()

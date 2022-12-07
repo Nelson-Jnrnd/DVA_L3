@@ -1,3 +1,14 @@
+/*
+====================================================================================================
+
+Auteurs : Nelson Jeanrenaud - Yohann Paulus - Luca Zacheo
+
+Projet : Labo3 - Architecture MVVM, utilisation d’une base de données Room et d’un RecyclerView
+Branche : DVA
+Fichier : ControlsFragment.kt
+
+====================================================================================================
+*/
 package com.example.dva_l3.views
 
 import android.os.Bundle
@@ -12,9 +23,6 @@ import com.example.dva_l3.MyApp
 import com.example.dva_l3.R
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.viewModels.NoteViewModel
-
-
-
 
 class ControlsFragment : Fragment() {
 
