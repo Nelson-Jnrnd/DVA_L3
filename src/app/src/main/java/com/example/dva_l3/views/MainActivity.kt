@@ -16,7 +16,6 @@ import com.example.dva_l3.models.Note.Companion.generateRandomNote
 import com.example.dva_l3.models.Note.Companion.generateRandomSchedule
 import com.example.dva_l3.models.Schedule
 import com.example.dva_l3.viewModels.NoteViewModel
-import com.example.dva_l3.viewModels.NotesViewModelFactory
 import com.example.dva_l3.viewModels.SortType
 
 
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
     }
 
     private val viewModel: NoteViewModel by viewModels{
-        NotesViewModelFactory(repository)
+        NoteViewModel.NotesViewModelFactory(repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

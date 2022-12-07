@@ -12,7 +12,7 @@ import com.example.dva_l3.views.MainActivity
 import kotlin.concurrent.thread
 
 
-@Database(entities = arrayOf(Note::class, Schedule::class), version = 1, exportSchema = true)
+@Database(entities = arrayOf(Note::class, Schedule::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {
 

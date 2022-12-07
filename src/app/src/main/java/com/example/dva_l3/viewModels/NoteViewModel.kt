@@ -14,7 +14,6 @@ enum class SortType {
 }
 
 class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
-    private var currentSort: SortType? = null
     // on below line we are creating a variable
     // for our all notes list and repository
     val allNotes : LiveData<List<Note>> = repository.allNotes
@@ -33,20 +32,7 @@ class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getAllNotesSorted(created: SortType) {
-        currentSort = created
-        when (created) {
-            SortType.CREATED -> {
-                allNotes.value?.sortedBy { it.creationDate }
-            }
-            SortType.ETA -> {
-                allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId }?.date }
-                // put the ones without a schedule at the begining
-                allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId } == null }
-
-            }
-        }
-
-    }
+        repository.getAllSorted(created)
 }
 class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -56,4 +42,4 @@ class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelP
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-}
+}}

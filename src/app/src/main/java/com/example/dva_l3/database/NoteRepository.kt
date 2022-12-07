@@ -23,7 +23,21 @@ class NoteRepository(private val notesDao: NoteDao) {
             notesDao.insert(schedule)
         }
     }
+    fun getAllSorted(created: SortType) {
+        currentSort = created
+        when (created) {
+            SortType.CREATED -> {
+                allNotes.value?.sortedBy { it.creationDate }
+            }
+            SortType.ETA -> {
+                allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId }?.date }
+                // put the ones without a schedule at the begining
+                allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId } == null }
 
+            }
+        }
+
+    }
     fun deleteAll() {
         notesDao.deleteAll()
         notesDao.deleteAllSchedule()

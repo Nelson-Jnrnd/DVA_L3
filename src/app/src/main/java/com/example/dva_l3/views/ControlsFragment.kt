@@ -12,14 +12,14 @@ import com.example.dva_l3.MyApp
 import com.example.dva_l3.R
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.viewModels.NoteViewModel
-import com.example.dva_l3.viewModels.NotesViewModelFactory
+
 
 
 
 class ControlsFragment : Fragment() {
 
     private val viewModel: NoteViewModel by viewModels{
-        NotesViewModelFactory((requireActivity().application as MyApp).repository)
+        NoteViewModel.NotesViewModelFactory((requireActivity().application as MyApp).repository)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

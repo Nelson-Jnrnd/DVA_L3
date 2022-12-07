@@ -12,7 +12,6 @@ import com.example.dva_l3.Adapter
 import com.example.dva_l3.MyApp
 import com.example.dva_l3.R
 import com.example.dva_l3.viewModels.NoteViewModel
-import com.example.dva_l3.viewModels.NotesViewModelFactory
 
 
 /**
@@ -23,7 +22,7 @@ import com.example.dva_l3.viewModels.NotesViewModelFactory
 class NotesFragment : Fragment() {
 
     private val viewModel: NoteViewModel by viewModels{
-        NotesViewModelFactory((requireActivity().application as MyApp).repository)
+        NoteViewModel.NotesViewModelFactory((requireActivity().application as MyApp).repository)
     }
 
 
