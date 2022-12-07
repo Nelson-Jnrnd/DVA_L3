@@ -6,11 +6,12 @@ import com.example.dva_l3.models.Schedule
 import com.example.dva_l3.viewModels.SortType
 
 class NoteRepository(private val notesDao: NoteDao) {
-
+    private var currentSort: SortType? = null
     // on below line we are creating a variable for our list
     // and we are getting all the notes from our DAO class.
     val allNotes: LiveData<List<Note>> = notesDao.getAllNotes()
     val allSchedules: LiveData<List<Schedule>> = notesDao.getAllSchedules()
+    val nbNotes: LiveData<Int> = notesDao.getCount()
 
     // on below line we are creating an insert method
     // for adding the note to our database.
@@ -21,18 +22,7 @@ class NoteRepository(private val notesDao: NoteDao) {
             schedule.ownerId = id
             notesDao.insert(schedule)
         }
-
     }
-
-    // on below line we are creating a delete method
-    // for deleting our note from database.
-    suspend fun delete(note: Note){
-        notesDao.delete(note)
-    }
-
-    // on below line we are creating a update method for
-    // updating our note from database.
-
 
     fun deleteAll() {
         notesDao.deleteAll()

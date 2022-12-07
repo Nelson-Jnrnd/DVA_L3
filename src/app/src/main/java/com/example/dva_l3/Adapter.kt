@@ -1,7 +1,6 @@
 package com.example.dva_l3
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
@@ -14,17 +13,15 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.models.*
 import com.example.dva_l3.viewModels.SortType
-import com.example.dva_l3.views.MainActivity
-import java.time.temporal.ChronoUnit
+import com.example.dva_l3.views.NotesFragment
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 class Adapter(
-    val context: Context,
-    val noteClickInterface: NoteClickInterface,
-    val noteDeleteInterface: MainActivity
+    val context: NotesFragment
 ) :
+
     RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     // on below line we are creating a

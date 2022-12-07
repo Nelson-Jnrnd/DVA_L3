@@ -1,7 +1,6 @@
 package com.example.dva_l3.database
 
 import android.content.Context
-
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Schedule
+import com.example.dva_l3.views.MainActivity
 import kotlin.concurrent.thread
 
 

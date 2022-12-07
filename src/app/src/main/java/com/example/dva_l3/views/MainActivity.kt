@@ -5,26 +5,31 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.*
+import com.example.dva_l3.database.NoteDatabase
+import com.example.dva_l3.database.NoteRepository
 import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Note.Companion.generateRandomNote
 import com.example.dva_l3.models.Note.Companion.generateRandomSchedule
 import com.example.dva_l3.models.Schedule
 import com.example.dva_l3.viewModels.NoteViewModel
+import com.example.dva_l3.viewModels.NotesViewModelFactory
 import com.example.dva_l3.viewModels.SortType
 
 
 class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface{
 
-    lateinit var viewModal: NoteViewModel
-    lateinit var notesRV: RecyclerView
-    lateinit var noteRVAdapter: Adapter
+    val repository by lazy {
+        val database = NoteDatabase.getDatabase(this)
+        NoteRepository(database.getNotesDao())
+    }
+
+    private val viewModel: NoteViewModel by viewModels{
+        NotesViewModelFactory(repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,30 +47,6 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 .commit()
         }
 
-        notesRV = findViewById(R.id.notes_RV)
-
-        notesRV.layoutManager = LinearLayoutManager(this)
-
-        noteRVAdapter = Adapter(this, this, this)
-
-        notesRV.adapter = noteRVAdapter
-
-        viewModal = ViewModelProviders.of(this@MainActivity).get(NoteViewModel(application)::class.java)
-
-        viewModal.allNotes.observe(this, Observer { list ->
-            list?.let {
-                // on below line we are updating our list.
-                noteRVAdapter.updateList(it)
-            }
-        })
-
-        viewModal.allSchedules.observe(this, Observer { list ->
-            list?.let {
-                // on below line we are updating our list.
-                noteRVAdapter.updateScheduleList(it)
-            }
-        })
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -81,11 +62,11 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.sort_by_ETA -> {
-                            noteRVAdapter.getAllNotesSorted(SortType.ETA)
+                            viewModel.getAllNotesSorted(SortType.ETA)
                             true
                         }
                         R.id.sort_by_creation_date -> {
-                            noteRVAdapter.getAllNotesSorted(SortType.CREATED)
+                            viewModel.getAllNotesSorted(SortType.CREATED)
                             Toast.makeText(this, "wesh... ", Toast.LENGTH_SHORT).show()
                             true
                         }
@@ -121,9 +102,9 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
     }
 
     override fun onNoteClick(note: Note, generateRandomSchedule: Schedule?) {
-        viewModal.addNote(note, generateRandomSchedule)
+        viewModel.addNote(note, generateRandomSchedule)
     }
     override fun onDeleteClick() {
-        viewModal.deleteNote()
+        viewModel.deleteNote()
     }
 }
