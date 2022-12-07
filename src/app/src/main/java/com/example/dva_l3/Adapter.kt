@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.models.*
 import com.example.dva_l3.viewModels.SortType
 import com.example.dva_l3.views.MainActivity
+import java.time.temporal.ChronoUnit
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class Adapter(
@@ -28,7 +31,7 @@ class Adapter(
     // variable for our all notes list.
     private val allNotes = ArrayList<Note>()
     private val allSchedules = ArrayList<Schedule>()
-    private val allNoteSchedules = ArrayList<NoteAndSchedule>()
+    private var currentSort: SortType? = null
 
 
     // on below line we are creating a view holder class.
@@ -51,6 +54,7 @@ class Adapter(
         return ViewHolder(itemView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // on below line we are setting data to item of recycler view.
@@ -89,12 +93,44 @@ class Adapter(
         }
         if (schedule != null) {
             // Get the date as a string and set it to the text view
-            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time) // TODO change to locale or something
-            holder.noteTxtClock.text = date.toString()
+            val date = SimpleDateFormat("dd/MM/yyyy").format(schedule.date.time)
+            val current = SimpleDateFormat("dd/MM/yyyy").format(Date())
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val firstDate: Date = sdf.parse(date)
+            val secondDate: Date = sdf.parse(current)
+
+
+            if (firstDate < secondDate) {
+                holder.noteTxtClock.setTextColor(Color.RED)
+                holder.noteTxtClock.text = "Late"
+                holder.noteImgClock.setColorFilter(Color.RED)
+            }
+            else if (firstDate == secondDate) {
+                holder.noteTxtClock.setTextColor(Color.YELLOW)
+                holder.noteTxtClock.text = "Today"
+                holder.noteImgClock.setColorFilter(Color.YELLOW)
+            }
+            else{
+                val diff: Long = firstDate.time - secondDate.time
+                val day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+                if (day >= 30){
+                    val month = Math.abs(day / 30)
+                    if (month >= 12){
+                        val year = Math.abs(month / 12)
+                        holder.noteTxtClock.text = "$year years"
+                    }
+                    else{
+                        holder.noteTxtClock.text = "$month months"
+                    }
+                }
+                else{
+                    holder.noteTxtClock.text = "$day days"
+                }
+            }
+
             holder.noteImgClock.visibility = View.VISIBLE
             holder.noteTxtClock.visibility = View.VISIBLE
         } else {
-            // print to console
             holder.noteImgClock.visibility = View.GONE
             holder.noteTxtClock.visibility = View.GONE
         }
@@ -115,6 +151,8 @@ class Adapter(
         // on below line we are adding a
         // new list to our all notes list.
         allNotes.addAll(newList)
+        currentSort?.let { getAllNotesSorted(it) }
+
         // on below line we are calling notify data
         // change method to notify our adapter.
         notifyDataSetChanged()
@@ -133,22 +171,20 @@ class Adapter(
     }
 
     fun getAllNotesSorted(created: SortType) {
+        currentSort = created
         when (created) {
             SortType.CREATED -> {
                 allNotes.sortByDescending { it.creationDate }
             }
             SortType.ETA -> {
-
                 allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
                 // put the ones without a schedule at the begining
                 allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
             }
         }
-
         notifyDataSetChanged()
     }
 }
-
 
 interface NoteClickInterface {
     // creating a method for click action
