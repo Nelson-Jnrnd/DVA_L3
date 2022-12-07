@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.dva_l3.database.NoteDatabase
 import com.example.dva_l3.database.NoteRepository
 import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.models.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,9 +17,11 @@ enum class SortType {
 class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
     // on below line we are creating a variable
     // for our all notes list and repository
-    val allNotes : LiveData<List<Note>> = repository.allNotes
+    val allNotes : LiveData<List<NoteAndSchedule>> = repository.allNotes
     val allSchedules : LiveData<List<Schedule>> = repository.allSchedules
     val nbNotes = repository.nbNotes
+    val mutTypes = MutableLiveData(SortType.CREATED)
+    var types : LiveData<SortType> = mutTypes
 
 
     // on below line we are creating a new method for adding a new note to our database
@@ -31,8 +34,8 @@ class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
         repository.deleteAll()
     }
 
-    fun getAllNotesSorted(created: SortType) {
-        repository.getAllSorted(created)
+    fun getAllNotesSorted(type: SortType) {
+       mutTypes.value = type
     }
 
 class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelProvider.Factory {

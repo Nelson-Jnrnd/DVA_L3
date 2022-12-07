@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dva_l3.Adapter
 import com.example.dva_l3.MyApp
 import com.example.dva_l3.R
+import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.viewModels.NoteViewModel
+import com.example.dva_l3.viewModels.SortType
 
 
 /**
@@ -24,7 +27,7 @@ class NotesFragment : Fragment() {
     private val viewModel: NoteViewModel by viewModels{
         NoteViewModel.NotesViewModelFactory((requireActivity().application as MyApp).repository)
     }
-
+    private var currentSort: SortType? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recycler = view.findViewById<RecyclerView>(R.id.notes_RV)
@@ -37,6 +40,9 @@ class NotesFragment : Fragment() {
                 adapter.updateList(it)
             }
         }
+        viewModel.types.observe(viewLifecycleOwner) {
+            adapter.items = getAllSorted(adapter.items, it)
+        }
 
         viewModel.allSchedules.observe(viewLifecycleOwner) {
                 list -> list?.let {
@@ -44,6 +50,19 @@ class NotesFragment : Fragment() {
             }
         }
     }
+    private fun getAllSorted(items: List<NoteAndSchedule>, created: SortType): List<NoteAndSchedule> {
+        currentSort = created
+        return when (created) {
+            SortType.CREATED -> {
+               items.sortedBy { it.note.creationDate }
+            }
+            SortType.ETA -> {
+                items.sortedWith(compareBy(nullsLast()) { it.schedule?.date })
+            }
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

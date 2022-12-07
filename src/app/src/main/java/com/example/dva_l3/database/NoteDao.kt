@@ -4,6 +4,7 @@ package com.example.dva_l3.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.dva_l3.models.Note
+import com.example.dva_l3.models.NoteAndSchedule
 import com.example.dva_l3.models.Schedule
 
 // annotation for dao class.
@@ -30,7 +31,7 @@ interface NoteDao {
     // the table name from which
     // we have to get the data.
     @Query("Select * from notesTable order by noteId ASC")
-    fun getAllNotes(): LiveData<List<Note>>
+    fun getAllNotes(): LiveData<List<NoteAndSchedule>>
 
     @Query("Select * from schedulesTable order by scheduleId ASC")
     fun getAllSchedules(): LiveData<List<Schedule>>

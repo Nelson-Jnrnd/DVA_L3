@@ -11,10 +11,8 @@ import androidx.fragment.app.FragmentContainerView
 import com.example.dva_l3.*
 import com.example.dva_l3.database.NoteDatabase
 import com.example.dva_l3.database.NoteRepository
-import com.example.dva_l3.models.Note
 import com.example.dva_l3.models.Note.Companion.generateRandomNote
 import com.example.dva_l3.models.Note.Companion.generateRandomSchedule
-import com.example.dva_l3.models.Schedule
 import com.example.dva_l3.viewModels.NoteViewModel
 import com.example.dva_l3.viewModels.SortType
 
@@ -62,6 +60,7 @@ class MainActivity : AppCompatActivity(){
                         R.id.sort_by_ETA -> {
                             Toast.makeText(this, "sort by ETA...", Toast.LENGTH_SHORT).show()
                             viewModel.getAllNotesSorted(SortType.ETA)
+
                             true
                         }
                         R.id.sort_by_creation_date -> {
