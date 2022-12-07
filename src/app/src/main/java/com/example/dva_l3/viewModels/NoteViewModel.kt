@@ -33,7 +33,8 @@ class NoteViewModel (private val repository: NoteRepository) : ViewModel() {
 
     fun getAllNotesSorted(created: SortType) {
         repository.getAllSorted(created)
-}
+    }
+
 class NotesViewModelFactory(private val repository: NoteRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(NoteViewModel::class.java)) {

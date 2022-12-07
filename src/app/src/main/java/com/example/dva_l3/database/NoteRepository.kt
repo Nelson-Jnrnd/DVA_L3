@@ -33,10 +33,8 @@ class NoteRepository(private val notesDao: NoteDao) {
                 allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId }?.date }
                 // put the ones without a schedule at the begining
                 allNotes.value?.sortedBy { allSchedules.value?.find { schedule -> schedule.ownerId == it.noteId } == null }
-
             }
         }
-
     }
     fun deleteAll() {
         notesDao.deleteAll()

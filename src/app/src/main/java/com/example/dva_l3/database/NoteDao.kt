@@ -43,4 +43,5 @@ interface NoteDao {
 
     @Query("SELECT COUNT(*) FROM notesTable")
     fun getCount(): LiveData<Int>
+
 }

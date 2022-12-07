@@ -28,7 +28,6 @@ class Adapter(
     // variable for our all notes list.
     private val allNotes = ArrayList<Note>()
     private val allSchedules = ArrayList<Schedule>()
-    private var currentSort: SortType? = null
 
 
     // on below line we are creating a view holder class.
@@ -148,7 +147,7 @@ class Adapter(
         // on below line we are adding a
         // new list to our all notes list.
         allNotes.addAll(newList)
-        currentSort?.let { getAllNotesSorted(it) }
+
 
         // on below line we are calling notify data
         // change method to notify our adapter.
@@ -166,31 +165,4 @@ class Adapter(
         // change method to notify our adapter.
         notifyDataSetChanged()
     }
-
-    fun getAllNotesSorted(created: SortType) {
-        currentSort = created
-        when (created) {
-            SortType.CREATED -> {
-                allNotes.sortByDescending { it.creationDate }
-            }
-            SortType.ETA -> {
-                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId }?.date }
-                // put the ones without a schedule at the begining
-                allNotes.sortBy { allSchedules.find { schedule -> schedule.ownerId == it.noteId } == null }
-            }
-        }
-        notifyDataSetChanged()
-    }
-}
-
-interface NoteClickInterface {
-    // creating a method for click action
-    // on recycler view item for updating it.
-    fun onNoteClick(note: Note, generateRandomSchedule: Schedule?)
-}
-
-interface NoteDeleteInterface {
-    // creating a method for click action
-    // on recycler view item for updating it.
-    fun onDeleteClick()
 }

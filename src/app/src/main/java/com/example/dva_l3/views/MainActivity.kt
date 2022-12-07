@@ -19,7 +19,7 @@ import com.example.dva_l3.viewModels.NoteViewModel
 import com.example.dva_l3.viewModels.SortType
 
 
-class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterface{
+class MainActivity : AppCompatActivity(){
 
     val repository by lazy {
         val database = NoteDatabase.getDatabase(this)
@@ -81,12 +81,12 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.generate -> {
-                            onNoteClick(generateRandomNote(),generateRandomSchedule())
+                            viewModel.addNote(generateRandomNote(),generateRandomSchedule())
                             Toast.makeText(this, "Generated Note ", Toast.LENGTH_SHORT).show()
                             true
                         }
                         R.id.delete_all -> {
-                            onDeleteClick()
+                            viewModel.deleteNote()
                             Toast.makeText(this, "All notes deleted ", Toast.LENGTH_SHORT).show()
                             true
                         }
@@ -98,12 +98,5 @@ class MainActivity : AppCompatActivity(), NoteClickInterface, NoteDeleteInterfac
             }
             else -> super.onOptionsItemSelected(menuItem)
         }
-    }
-
-    override fun onNoteClick(note: Note, generateRandomSchedule: Schedule?) {
-        viewModel.addNote(note, generateRandomSchedule)
-    }
-    override fun onDeleteClick() {
-        viewModel.deleteNote()
     }
 }
